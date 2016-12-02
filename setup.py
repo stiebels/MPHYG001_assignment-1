@@ -4,12 +4,12 @@ setup(name = 'Greengraph',
     version = '0.1',
     description = 'Calculates the number of green pixels between two geographical locations',
     author = 'Simon Stiebellehbner',
-    author_email = 'ucabsti@gmail.com',
+    author_email = 'ucabsti@ucl.ac.uk',
     maintainer = 'Simon Stiebellehner',
-    maintainer_email = 'ucabsti@gmail.com',
+    maintainer_email = 'ucabsti@ucl.ac.uk',
     url = 'https://github.com/stiebels/',
     packages = find_packages(exclude=['*test']),
     license = 'MIT',
-    install_requires = ['numpy', 'geopy', 'matplotlib', 'geopy', 'StringIO', 'requests', 'argparse'],
-	scripts= ['scripts/greengraph']
+    install_requires = ['numpy', 'geopy', 'matplotlib', 'geopy', 'requests', 'argparse'],
+	scripts= ['scripts/run_greengraph.py']
     )
