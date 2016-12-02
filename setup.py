@@ -10,6 +10,6 @@ setup(name = 'Greengraph',
     url = 'https://github.com/stiebels/',
     packages = find_packages(exclude=['*test']),
     license = 'MIT',
-    install_requires = ['numpy', 'geopy', 'matplotlib', 'geopy', 'requests', 'argparse'],
+    install_requires = ['numpy', 'matplotlib', 'geopy', 'requests', 'argparse'],
 	scripts= ['scripts/run_greengraph.py']
     )
