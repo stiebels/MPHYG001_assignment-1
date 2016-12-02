@@ -1,6 +1,7 @@
 import numpy as np
-from StringIO import StringIO
+from io import StringIO
 from matplotlib import image as img
+import requests
 
 
 class Map(object):
@@ -34,9 +35,9 @@ class Map(object):
     def count_green(self, threshold=1.1):
         return np.sum(self.green(threshold))
 
-    def show_green(data, threshold=1.1):
+    def show_green(self, data, threshold=1.1):
         green = self.green(threshold)
-        out = green[:, :, np.newaxis] * array([0, 1, 0])[np.newaxis, np.newaxis, :]
+        out = green[:, :, np.newaxis] * np.array([0, 1, 0])[np.newaxis, np.newaxis, :]
         buffer = StringIO()
         result = img.imsave(buffer, out, format='png')
         return buffer.getvalue()

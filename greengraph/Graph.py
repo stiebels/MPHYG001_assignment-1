@@ -1,5 +1,6 @@
 import numpy as np
 import geopy
+from greengraph.Map import Map
 
 
 class Graph(object):
