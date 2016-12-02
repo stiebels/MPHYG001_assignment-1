@@ -1,6 +1,7 @@
 import numpy as np
 import geopy
 
+
 class Graph(object):
     def __init__(self, start, end):
         self.start = start

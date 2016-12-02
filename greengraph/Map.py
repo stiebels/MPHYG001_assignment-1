@@ -2,6 +2,7 @@ import numpy as np
 from StringIO import StringIO
 from matplotlib import image as img
 
+
 class Map(object):
     def __init__(self, lat, long, satellite=True, zoom=10, size=(400, 400), sensor=False):
         base = "http://maps.googleapis.com/maps/api/staticmap?"
@@ -36,3 +37,6 @@ class Map(object):
     def show_green(data, threshold=1.1):
         green = self.green(threshold)
         out = green[:, :, np.newaxis] * array([0, 1, 0])[np.newaxis, np.newaxis, :]
+        buffer = StringIO()
+        result = img.imsave(buffer, out, format='png')
+        return buffer.getvalue()

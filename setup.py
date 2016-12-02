@@ -11,4 +11,5 @@ setup(name = 'Greengraph',
     packages = find_packages(exclude=['*test']),
     license = 'MIT',
     install_requires = ['numpy', 'geopy', 'matplotlib', 'geopy', 'StringIO', 'requests', 'argparse']
+	scripts= ['scripts/greengraph']
     )

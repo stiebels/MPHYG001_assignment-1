@@ -63,4 +63,13 @@ class Map(object):
     def show_green(data, threshold=1.1):
         green = self.green(threshold)
         out = green[:, :, np.newaxis] * array([0, 1, 0])[np.newaxis, np.newaxis, :]
+        buffer = StringIO()
+        result = img.imsave(buffer, out, format='png')
+        return buffer.getvalue()
+
+
+mygraph=Greengraph('New York','Chicago')
+data = mygraph.green_between(20)
+plt.plot(data)
+
 ~~~
