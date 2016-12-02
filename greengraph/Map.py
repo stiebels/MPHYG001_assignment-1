@@ -1,5 +1,5 @@
 import numpy as np
-from io import StringIO
+from StringIO import StringIO
 from matplotlib import image as img
 import requests
 
