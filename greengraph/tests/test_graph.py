@@ -1,5 +1,5 @@
 from pytest import raises
-from mock import Mock, patch
+from mock import Mock, patch, MagicMock
 import numpy as np
 import geopy
 from greengraph.Graph import Graph
@@ -8,7 +8,6 @@ from greengraph.Map import Map
 
 t_Graph = Graph('London', 'Cambridge')
 
-# MAKE SURE EVERYTHING WORKS WITHOUT INTERNET (insert mocks)
 
 def t_location_sequence():
     # Test calculation of location_sequence
@@ -29,13 +28,13 @@ def t_geolocate():
         m_geocode.assert_called_with('London', exactly_one=False)
 
 
-def t_green_between():
+# not working?
+@patch('greengraph.Graph.geolocate')
+def t_green_between(m_geolocate):
     # Test calculation of green_between
-    results = [0,0,0,0,93175] # results for
-    count = 0
-    for location in t_Graph.location_sequence((-10,-10), (10,10), 5):
-        assert(results[count] == Map(*location).count_green())
-        count = count + 1
+    with patch.object(Map, 'count_green', return_value='None') as m_Map_count_green:
+        [m_Map_count_green for location in t_Graph.location_sequence(m_geolocate(t_Graph.start), m_geolocate(t_Graph.end),5)]
+        assert m_Map_count_green.call_count == 5
 
 
 #def t_coordinates(start=(-181, -50), end=(181, 50), steps=20):
