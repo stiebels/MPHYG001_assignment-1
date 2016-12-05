@@ -8,7 +8,6 @@ from greengraph.Map import Map
 
 t_Graph = Graph('London', 'Cambridge')
 
-
 def t_location_sequence():
     # Test calculation of location_sequence
     to_be = np.array([[-10., -10.], [-5., -5.], [0., 0.], [5., 5.], [10., 10.]])
@@ -28,13 +27,12 @@ def t_geolocate():
         m_geocode.assert_called_with('London', exactly_one=False)
 
 
-# not working?
-@patch('greengraph.Graph.geolocate')
-def t_green_between(m_geolocate):
+def t_green_between():
     # Test calculation of green_between
-    with patch.object(Map, 'count_green', return_value='None') as m_Map_count_green:
-        [m_Map_count_green for location in t_Graph.location_sequence(m_geolocate(t_Graph.start), m_geolocate(t_Graph.end),5)]
-        assert m_Map_count_green.call_count == 5
+    m_sequence = [0,0,0,0,93575]
+    with patch.object(Map, '__init__') as m_Map:
+        [m_Map.count_green() for location in m_sequence]
+        assert m_Map.count_green.call_count == len(m_sequence)
 
 
 #def t_coordinates(start=(-181, -50), end=(181, 50), steps=20):
