@@ -35,6 +35,7 @@ def t_green_between():
         assert m_Map.count_green.call_count == len(m_sequence)
 
 
+
 #def t_coordinates(start=(-181, -50), end=(181, 50), steps=20):
     # Test possible coordinates
     # Non-existent coordinates can be used, however, since the GoogleAPI will
