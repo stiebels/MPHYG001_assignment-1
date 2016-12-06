@@ -8,7 +8,7 @@ import pickle
 
 
 def load_img_fixtures():
-    directory = str(os.path.dirname(os.path.abspath("__file__")) + '/fixtures/')
+    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
     m_imgs_fix = []
     for file in os.listdir(directory):
         if file.endswith('.png'):
@@ -22,7 +22,7 @@ def load_img_fixtures():
 
 
 def load_map_fixtures():
-    directory = str(os.path.dirname(os.path.abspath("__file__")) + '/fixtures/')
+    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
     file = open(directory+"mock_map",'rb')
     m_Map_fix = pickle.load(file)
     file.close()

@@ -9,7 +9,7 @@ import os
 
 def load_graph_fixtures():
     # Load fixture of Graph
-    directory = str(os.path.dirname(os.path.abspath("__file__")) + '/fixtures/')
+    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
     file = open(directory + "mock_graph", 'rb')
     m_Graph_fix = pickle.load(file)
     file.close()
@@ -38,7 +38,7 @@ def t_geocoder():
     try:
         with raises(TypeError):
             t_Graph.geolocate('123asdf') is None
-    except(Error):
+    except:
         print('Please connect to the Internet for this test.')
 
 
