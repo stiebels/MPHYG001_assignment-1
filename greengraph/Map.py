@@ -39,6 +39,6 @@ class Map(object):
     def show_green(self, data, threshold=1.1):
         green = self.green(threshold)
         out = green[:, :, np.newaxis] * np.array([0, 1, 0])[np.newaxis, np.newaxis, :]
-        buffer = StringIO()
+        buffer = BytesIO()
         result = img.imsave(buffer, out, format='png')
         return buffer.getvalue()
