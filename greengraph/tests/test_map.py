@@ -1,11 +1,12 @@
 from mock import Mock, patch, MagicMock
 import numpy as np
-from greengraph.Map import Map
 from PIL import Image
-from os import listdir
+import os
+from io import BytesIO
+from greengraph.Map import Map
 
 
-def define_img_fixtures(files):
+def define_img_fixtures():
     directory = '/home/sist/PycharmProjects/MPHYG001_assignment-1/greengraph/tests/fixtures/'
     m_imgs_fix = []
 
@@ -19,18 +20,15 @@ def define_img_fixtures(files):
     return m_imgs_fix
 
 
-m_imgs_fix = define_img_fixtures(['lc1.png'])
-
-
-@patch('requests.get', return_value=MagicMock(content=m_imgs_fix[0]))
-def t_Map(m_req_get):
+@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
+def t_Map_init(m_req_get):
     for i in range(0, 2):
         if i == 0:
             t_Map = Map(51.5073509, -0.1277583, satellite=False)  # London
 
             # Check if requests.get is called with right parameters
             m_req_get.assert_called_with(
-                base="http://maps.googleapis.com/maps/api/staticmap?",
+                "http://maps.googleapis.com/maps/api/staticmap?",
                 params=dict(
                     sensor=str(False).lower(),
                     zoom=10,
@@ -39,11 +37,12 @@ def t_Map(m_req_get):
                     style="feature:all|element:labels|visibility:off"
                 )
             )
+
         else:
             t_Map = Map(51.5073509, -0.1277583)  # London
             # Check if requests.get is called with right parameters
             m_req_get.assert_called_with(
-                base="http://maps.googleapis.com/maps/api/staticmap?",
+                "http://maps.googleapis.com/maps/api/staticmap?",
                 params=dict(
                     sensor=str(False).lower(),
                     zoom=10,
@@ -55,12 +54,12 @@ def t_Map(m_req_get):
             )
 
             # Check self.pixels calculation
-            assert (type(t_Map.pixels) is 'numpy.ndarray')
+            assert (str(type(t_Map.pixels)) == '<class \'numpy.ndarray\'>')
             assert (len(t_Map.pixels) == 400)
             assert (np.shape(t_Map.pixels) == (400, 400, 3))
 
 
-@patch('requests.get', return_value=MagicMock(content=m_fix1_img))
+@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
 def t_green(m_req_get):
     t_Map = Map(51.5073509, -0.1277583)  # London
 
@@ -74,30 +73,31 @@ def t_green(m_req_get):
         assert ((check_green[i] < check_green[i - 1]) == True)
 
 
-# INVALID PNG HEADER ???
-@patch('requests.get', return_value=MagicMock(content=m_fix1_img))
+@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
 def t_count_green(m_req_get):
-    t_Map = Map(51.5073509, -0.1277583) # London
+    t_Map = Map(51.5073509, -0.1277583)  # London
 
     # Check that green and count_green return correct sums
     assert (t_Map.count_green(1.1) == 108024)
     assert (sum(sum(t_Map.green(1.1))) == 108024)
 
 
-# INVALID PNG HEADER ???
-@patch('requests.get', return_value=MagicMock(content=m_fix1_img))
+@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
 def t_show_green(m_req_get):
-    t_Map = Map(51.5073509, -0.1277583) # London
+    t_Map = Map(51.5073509, -0.1277583)  # London
 
+    # Checking decoding of PNG map by randomly checking coloring of PNG map
     zeros = 0
     nines = 0
     for char in t_Map.show_green(t_Map):
-        if '0' in str(char) == 0:
+        if '0' in str(char):
             zeros += 1
         if '9' in str(char):
             nines += 1
 
     assert (zeros == 3958)
     assert (nines == 3583)
+
+    # Checking size and type of output of function
     assert (len(t_Map.show_green(t_Map)) == 22283)
-    assert (type(t_Map.show_green(t_Map)) == 'bytes')
+    assert (str(type(t_Map.show_green(t_Map))) == '<class \'bytes\'>')
