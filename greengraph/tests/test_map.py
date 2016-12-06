@@ -4,26 +4,36 @@ from PIL import Image
 import os
 from io import BytesIO
 from greengraph.Map import Map
+import pickle
 
 
-def define_img_fixtures():
-    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
+def load_img_fixtures():
+    directory = str(os.path.dirname(os.path.abspath("__file__")) + '/fixtures/')
     m_imgs_fix = []
     for file in os.listdir(directory):
-        byteImgIO = BytesIO()
-        m_img = Image.open(directory + str(file))
-        m_img.save(byteImgIO, "PNG")
-        byteImgIO.seek(0)
-        m_imgs_fix.append(byteImgIO.read())
+        if file.endswith('.png'):
+            byteImgIO = BytesIO()
+            m_img = Image.open(directory + str(file))
+            m_img.save(byteImgIO, "PNG")
+            byteImgIO.seek(0)
+            m_imgs_fix.append(byteImgIO.read())
 
     return m_imgs_fix
 
 
-@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
+def load_map_fixtures():
+    directory = str(os.path.dirname(os.path.abspath("__file__")) + '/fixtures/')
+    file = open(directory+"mock_map",'rb')
+    m_Map_fix = pickle.load(file)
+    file.close()
+    return m_Map_fix
+
+
+@patch('requests.get', return_value=MagicMock(content=load_img_fixtures()[0]))
 def t_Map_init(m_req_get):
     for i in range(0, 2):
         if i == 0:
-            t_Map = Map(51.5073509, -0.1277583, satellite=False)  # London
+            t_Map = Map(51.5073509, -0.1277583, satellite=False)
 
             # Check if requests.get is called with right parameters
             m_req_get.assert_called_with(
@@ -58,9 +68,8 @@ def t_Map_init(m_req_get):
             assert (np.shape(t_Map.pixels) == (400, 400, 3))
 
 
-@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
-def t_green(m_req_get):
-    t_Map = Map(51.5073509, -0.1277583)  # London
+def t_green():
+    t_Map = load_map_fixtures()
 
     # Check that green is recognized/computed correctly
     thresholds = np.arange(0.5, 2.5, 0.5)
@@ -72,18 +81,16 @@ def t_green(m_req_get):
         assert ((check_green[i] < check_green[i - 1]) == True)
 
 
-@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
-def t_count_green(m_req_get):
-    t_Map = Map(51.5073509, -0.1277583)  # London
+def t_count_green():
+    t_Map = load_map_fixtures()
 
     # Check that green and count_green return correct sums
     assert (t_Map.count_green(1.1) == 108024)
     assert (sum(sum(t_Map.green(1.1))) == 108024)
 
 
-@patch('requests.get', return_value=MagicMock(content=define_img_fixtures()[0]))
-def t_show_green(m_req_get):
-    t_Map = Map(51.5073509, -0.1277583)  # London
+def t_show_green():
+    t_Map = load_map_fixtures()
 
     # Checking decoding of PNG map by randomly checking coloring of PNG map
     zeros = 0

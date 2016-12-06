@@ -26,6 +26,7 @@ class Map(object):
         self.pixels = img.imread(BytesIO(self.image))
         # Parse our PNG image as a numpy array
 
+
     def green(self, threshold):
         # Use NumPy to build an element-by-element logical array
         greener_than_red = self.pixels[:, :, 1] > threshold * self.pixels[:, :, 0]
@@ -33,8 +34,10 @@ class Map(object):
         green = np.logical_and(greener_than_red, greener_than_blue)
         return green
 
+
     def count_green(self, threshold=1.1):
         return np.sum(self.green(threshold))
+
 
     def show_green(self, data, threshold=1.1):
         green = self.green(threshold)

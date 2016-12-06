@@ -1,12 +1,19 @@
 from pytest import raises
 from mock import Mock, patch, MagicMock
-import numpy as np
 import geopy
 from greengraph.Graph import Graph
 from greengraph.Map import Map
+import pickle
+import os
 
 
-t_Graph = Graph('London', 'Cambridge')
+def load_graph_fixtures():
+    # Load fixture of Graph
+    directory = str(os.path.dirname(os.path.abspath("__file__")) + '/fixtures/')
+    file = open(directory + "mock_graph", 'rb')
+    m_Graph_fix = pickle.load(file)
+    file.close()
+    return m_Graph_fix
 
 
 @patch('geopy.geocoders.GoogleV3')
@@ -20,27 +27,35 @@ def t_Graph_init(m_geocode):
 
 def t_location_sequence():
     # Test calculation of location_sequence
-    to_be = np.array([[-10., -10.], [-5., -5.], [0., 0.], [5., 5.], [10., 10.]])
-    assert (t_Graph.location_sequence((-10, -10), (10, 10), 5) == to_be).all
+    t_Graph = Graph('London', 'Cambridge')
+    assert (t_Graph.location_sequence((-10, -10), (10, 10), 5) == \
+            load_graph_fixtures().location_sequence((-10, -10), (10, 10), 5)).all
 
 
 def t_geocoder():
-    # Test unknown location passed to geolocate
-    with raises(TypeError):
-        t_Graph.geolocate('123asdf') is None
+    # Test unknown location passed to geolocate - REQUIRES INTERNET because it depends on GoogleAPI response
+    t_Graph = Graph('London', 'Cambridge')
+    try:
+        with raises(TypeError):
+            t_Graph.geolocate('123asdf') is None
+    except(Error):
+        print('Please connect to the Internet for this test.')
 
 
 def t_geolocate():
     # Test calling of geopy
+    t_Graph = Graph('London', 'Cambridge')
     with patch.object(geopy.geocoders.GoogleV3, 'geocode') as m_geocode:
         t_Graph.geolocate('London')
         m_geocode.assert_called_with('London', exactly_one=False)
 
 
-def t_green_between():
+@patch('geopy.geocoders.GoogleV3')
+def t_green_between(m_geocoder):
     # Test calculation of green_between
-    m_sequence = [0, 0, 0, 0, 93575]
+    m_sequence = [0, 0, 0, 0, 0]
     with patch.object(Map, '__init__') as m_Map:
+        t_Graph = Graph('London', 'Cambridge')
         [m_Map.count_green() for location in m_sequence]
         assert m_Map.count_green.call_count == len(m_sequence)
 
