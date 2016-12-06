@@ -8,7 +8,7 @@ setup(name = 'Greengraph',
     maintainer = 'Simon Stiebellehner',
     maintainer_email = 'ucabsti@ucl.ac.uk',
     url = 'https://github.com/stiebels/',
-    packages = find_packages(),
+    packages = find_packages(exclude=['*test']),
     license = 'MIT',
     install_requires = ['numpy', 'matplotlib', 'geopy', 'requests', 'argparse'],
 	scripts= ['scripts/run_greengraph.py']

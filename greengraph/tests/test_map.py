@@ -7,9 +7,8 @@ from greengraph.Map import Map
 
 
 def define_img_fixtures():
-    directory = '/home/sist/PycharmProjects/MPHYG001_assignment-1/greengraph/tests/fixtures/'
+    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
     m_imgs_fix = []
-
     for file in os.listdir(directory):
         byteImgIO = BytesIO()
         m_img = Image.open(directory + str(file))
