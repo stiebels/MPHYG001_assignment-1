@@ -1,8 +1,15 @@
-from io import StringIO
 from io import BytesIO
 import numpy as np
 from matplotlib import image as img
 import requests
+
+
+'''
+This class takes two locations as input parameters,
+obtains its latitude and longitude parameters using the
+GoogleMaps API, then calls the class Map to return
+the number of green pixels between the two locations.
+'''
 
 
 class Map(object):
