@@ -1,10 +1,16 @@
 from pytest import raises
-from mock import Mock, patch, MagicMock
+from mock import patch
 import geopy
 from greengraph.Graph import Graph
 from greengraph.Map import Map
+from greengraph.tests.test_map import load_map_fixtures
 import pickle
 import os
+import numpy as np
+
+'''
+This class tests the class Graph and its functions.
+'''
 
 
 def load_graph_fixtures():
@@ -28,7 +34,7 @@ def t_Graph_init(m_geocode):
 def t_location_sequence():
     # Test calculation of location_sequence
     t_Graph = Graph('London', 'Cambridge')
-    assert (t_Graph.location_sequence((-10, -10), (10, 10), 5) == \
+    assert (t_Graph.location_sequence((-10, -10), (10, 10), 5) ==
             load_graph_fixtures().location_sequence((-10, -10), (10, 10), 5)).all
 
 
@@ -53,17 +59,28 @@ def t_geolocate():
 @patch('geopy.geocoders.GoogleV3')
 def t_green_between(m_geocoder):
     # Test calculation of green_between
-    m_sequence = [0, 0, 0, 0, 0]
-    with patch.object(Map, '__init__') as m_Map:
+    with patch.object(Map, '__init__', return_value=load_map_fixtures()) as m_Map:
         t_Graph = Graph('London', 'Cambridge')
-        [m_Map.count_green() for location in m_sequence]
-        assert m_Map.count_green.call_count == len(m_sequence)
+
+        # Test how often location_sequence is called
+        [m_Map.count_green() for location in
+         t_Graph.location_sequence
+         ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)]
+        assert (m_Map.count_green.call_count == 5)
+
+        # Test whether the current object (t_Graph) returns same
+        # value for location_sequence as fixture
+        assert (np.array_equal(
+            load_graph_fixtures().location_sequence
+            ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)
+            , t_Graph.location_sequence
+            ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)
+        ) == True)
 
 
-
-        # def t_coordinates(start=(-181, -50), end=(181, 50), steps=20):
-        # Test possible coordinates
-        # Non-existent coordinates can be used, however, since the GoogleAPI will
-        # respond with 'None', this error is basically treated by function t_geocoder.
-        #    with raises(ValueError):
-        #        t_Graph.location_sequence(start, end, steps)
+# def t_coordinates(start=(-181, -50), end=(181, 50), steps=20):
+# Test possible coordinates
+# Non-existent coordinates can be used, however, since the GoogleAPI will
+# respond with 'None', this error is basically treated by function t_geocoder.
+#    with raises(ValueError):
+#        t_Graph.location_sequence(start, end, steps)
