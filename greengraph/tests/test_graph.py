@@ -13,7 +13,6 @@ import numpy as np
 This class tests the class Graph and its functions.
 '''
 
-
 def load_graph_fixtures():
     # Load fixture of Graph
     directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
