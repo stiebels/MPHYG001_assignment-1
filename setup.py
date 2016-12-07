@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
-setup(name = 'Greengraph',
-    version = '0.2',
+setup(name = 'greengraph',
+    version = '0.8',
     description = 'Calculates the number of green pixels between two geographical locations',
     author = 'Simon Stiebellehbner',
     author_email = 'ucabsti@ucl.ac.uk',
