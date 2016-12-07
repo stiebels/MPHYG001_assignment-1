@@ -3,6 +3,13 @@ import geopy
 from greengraph.Map import Map
 
 
+'''
+This class takes latitude and longitude as input parameters,
+then obtains a map using the GoogleMaps API as PNG
+and eventually computes the number of green pixels on the PNG image.
+'''
+
+
 class Graph(object):
     def __init__(self, start, end):
         self.start = start

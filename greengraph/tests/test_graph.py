@@ -8,6 +8,7 @@ import pickle
 import os
 import numpy as np
 
+
 '''
 This class tests the class Graph and its functions.
 '''
@@ -34,12 +35,21 @@ def t_Graph_init(m_geocode):
 def t_location_sequence():
     # Test calculation of location_sequence
     t_Graph = Graph('London', 'Cambridge')
-    assert (t_Graph.location_sequence((-10, -10), (10, 10), 5) ==
-            load_graph_fixtures().location_sequence((-10, -10), (10, 10), 5)).all
+
+    # Test whether the current object (t_Graph) returns same
+    # value for location_sequence as fixture. Using np for comparison since
+    # more accurate when handling very small numbers
+    assert (np.array_equal(
+        load_graph_fixtures().location_sequence
+        ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)
+        , t_Graph.location_sequence
+        ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)
+    ) == True)
 
 
 def t_geocoder():
-    # Test unknown location passed to geolocate - REQUIRES INTERNET because it depends on GoogleAPI response
+    # Test unknown location passed to geolocate
+    # REQUIRES INTERNET because it depends on GoogleAPI response
     t_Graph = Graph('London', 'Cambridge')
     try:
         with raises(TypeError):
@@ -68,14 +78,6 @@ def t_green_between(m_geocoder):
          ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)]
         assert (m_Map.count_green.call_count == 5)
 
-        # Test whether the current object (t_Graph) returns same
-        # value for location_sequence as fixture
-        assert (np.array_equal(
-            load_graph_fixtures().location_sequence
-            ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)
-            , t_Graph.location_sequence
-            ([51.5073509, -0.1277583], [52.205337, 0.121817], 5)
-        ) == True)
 
 
 # def t_coordinates(start=(-181, -50), end=(181, 50), steps=20):
