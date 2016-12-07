@@ -1,4 +1,4 @@
-from mock import Mock, patch, MagicMock
+from mock import patch, MagicMock
 import numpy as np
 from PIL import Image
 import os
@@ -7,21 +7,28 @@ from greengraph.Map import Map
 import pickle
 
 
-def load_img_fixtures():
-    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
-    m_imgs_fix = []
-    for file in os.listdir(directory):
-        if file.endswith('.png'):
-            byteImgIO = BytesIO()
-            m_img = Image.open(directory + str(file))
-            m_img.save(byteImgIO, "PNG")
-            byteImgIO.seek(0)
-            m_imgs_fix.append(byteImgIO.read())
+'''
+This class tests the class Map and its functions.
+'''
 
-    return m_imgs_fix
+
+def load_img_fixtures():
+    # Loads a 400x400px map of London as PNG
+    # which is used as fixture for offline testing
+
+    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
+    byteImgIO = BytesIO()
+    m_img_fix = Image.open(directory + str('lc1.png'))
+    m_img_fix.save(byteImgIO, "PNG")
+    byteImgIO.seek(0)
+    m_img_fix = byteImgIO.read()
+    return m_img_fix
 
 
 def load_map_fixtures():
+    # Loads a predefined Map object of London as fixture for offline testing.
+    # Map(51.5073509, -0.1277583)
+
     directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
     file = open(directory+"mock_map",'rb')
     m_Map_fix = pickle.load(file)
@@ -29,12 +36,13 @@ def load_map_fixtures():
     return m_Map_fix
 
 
-@patch('requests.get', return_value=MagicMock(content=load_img_fixtures()[0]))
+@patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
 def t_Map_init(m_req_get):
+    # Tests the parameter initialization and creation of a Map object
+
     for i in range(0, 2):
         if i == 0:
             t_Map = Map(51.5073509, -0.1277583, satellite=False)
-
             # Check if requests.get is called with right parameters
             m_req_get.assert_called_with(
                 "http://maps.googleapis.com/maps/api/staticmap?",
@@ -62,48 +70,59 @@ def t_Map_init(m_req_get):
                 )
             )
 
-            # Check self.pixels calculation
-            assert (str(type(t_Map.pixels)) == '<class \'numpy.ndarray\'>')
-            assert (len(t_Map.pixels) == 400)
-            assert (np.shape(t_Map.pixels) == (400, 400, 3))
+        # Check calculation of pixels
+        assert (str(type(t_Map.pixels)) == str(type(load_map_fixtures().pixels)))
+        assert (len(t_Map.pixels) == len(load_map_fixtures().pixels))
+        assert (np.shape(t_Map.pixels) == np.shape(load_map_fixtures().pixels))
+    # Check if requests.get is executed once per object creation
+    assert (m_req_get.call_count == 2)
 
 
-def t_green():
-    t_Map = load_map_fixtures()
+@patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
+def t_green(m_req_get):
+    # Tests the correctness of the computation done by this function.
+
+    t_Map = Map(51.5073509, -0.1277583)
 
     # Check that green is recognized/computed correctly
     thresholds = np.arange(0.5, 2.5, 0.5)
     check_green = []
-    for number in thresholds:
-        check_green.append(sum(sum(t_Map.green(number))))
+    for i in range(0, len(thresholds)):
+        check_green.append(sum(sum(t_Map.green(thresholds[i]))))
+        # Compares computation of t_Map.green() to calculation of fixture
+        assert (check_green[i] == sum(sum(load_map_fixtures().green(thresholds[i]))))
 
     for i in range(1, len(check_green)):
+        # Checks whether an increasing threshold has the expected effect
+        # on the outcome
         assert ((check_green[i] < check_green[i - 1]) == True)
 
 
-def t_count_green():
-    t_Map = load_map_fixtures()
+@patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
+def t_count_green(m_req_get):
+    # Tests whether the computation done by this functions is correct
+    # and matches the manual computation (sum(sum(x))) of the green() function.
 
-    # Check that green and count_green return correct sums
-    assert (t_Map.count_green(1.1) == 108024)
-    assert (sum(sum(t_Map.green(1.1))) == 108024)
+    t_Map = Map(51.5073509, -0.1277583)
+
+    # Check that count_green returns correct value
+    assert ((t_Map.count_green(1.1) == load_map_fixtures().count_green(1.1)))
+    assert (t_Map.count_green(1.1) == (sum(sum(t_Map.green(1.1)))))
 
 
-def t_show_green():
-    t_Map = load_map_fixtures()
+@patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
+def t_show_green(m_req_get):
+    # Tests the decoding of the PNG file and the correctness
+    # of the return value.
 
-    # Checking decoding of PNG map by randomly checking coloring of PNG map
-    zeros = 0
-    nines = 0
-    for char in t_Map.show_green(t_Map):
-        if '0' in str(char):
-            zeros += 1
-        if '9' in str(char):
-            nines += 1
+    t_Map = Map(51.5073509, -0.1277583)
 
-    assert (zeros == 3958)
-    assert (nines == 3583)
+    # Checking decoding of PNG map by comparing to fixture
+    assert(load_map_fixtures().show_green(t_Map) ==
+           t_Map.show_green(t_Map))
 
     # Checking size and type of output of function
-    assert (len(t_Map.show_green(t_Map)) == 22283)
-    assert (str(type(t_Map.show_green(t_Map))) == '<class \'bytes\'>')
+    assert (len(t_Map.show_green(t_Map)) ==
+            len(load_map_fixtures().show_green(t_Map)))
+    assert (str(type(t_Map.show_green(t_Map))) ==
+            str(type(load_map_fixtures().show_green(t_Map))))
