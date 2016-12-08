@@ -5,16 +5,19 @@ from greengraph.Graph import Graph
 
 def runModule():
     parser = ArgumentParser(description='Calculates the number of green pixels between two geographical locations.')
-    parser.add_argument('--begin', '-b', dest='begin', help='Enter start location.', required=True)
-    parser.add_argument('--end', '-e', dest='end', help='Enter location of target destination.', required=True)
-    parser.add_argument('--steps', '-s', default=25, dest='steps',
-                        help='Steps/points between begin and end', required=False)
+    parser.add_argument('-b', dest='begin', help='Enter start location.', required=True)
+    parser.add_argument('-e', dest='end', help='Enter location of target destination.', required=True)
+    parser.add_argument('-s', default=25, dest='steps', help='Steps/points between begin and end', required=False)
 
     args = parser.parse_args()
+    plotGraph(args.begin, args.end, args.steps)
 
-    mygraph = Graph(args.begin, args.end)
-    data = mygraph.green_between(args.steps)
+
+def plotGraph(begin, end, steps):
+    mygraph = Graph(begin, end)
+    data = mygraph.green_between(steps)
     plt.plot(data)
+    plt.show()
 
 
 if __name__ == '__main__':
