@@ -6,7 +6,7 @@ from greengraph.Graph import Graph
 def runModule():
     parser = ArgumentParser(description='Generates a graph that displays the number of green pixels between two geographical locations.')
     parser.add_argument('-b', '--begin', dest='begin', help='Enter start location.', required=True)
-    parser.add_argument('-e', 'end', dest='end', help='Enter location of target destination.', required=True)
+    parser.add_argument('-e', '--end', dest='end', help='Enter location of target destination.', required=True)
     parser.add_argument('-s', default=25, dest='steps', help='Steps between begin and end', required=False)
 
     args = parser.parse_args()
