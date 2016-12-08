@@ -7,7 +7,8 @@ def runModule():
     parser = ArgumentParser(description='Calculates the number of green pixels between two geographical locations.')
     parser.add_argument('--begin', '-b', dest='begin', help='Enter start location.', required=True)
     parser.add_argument('--end', '-e', dest='end', help='Enter location of target destination.', required=True)
-    parser.add_argument('--steps', '-s', default=25, dest='steps', help='Steps/points between begin and end', required=True)
+    parser.add_argument('--steps', '-s', default=25, dest='steps',
+                        help='Steps/points between begin and end', required=False)
 
     args = parser.parse_args()
 
