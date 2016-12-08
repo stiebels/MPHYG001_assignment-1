@@ -13,4 +13,3 @@ setup(name = 'greengraph',
     install_requires = ['numpy', 'matplotlib', 'geopy', 'requests', 'argparse'],
 	scripts= ['scripts/greengraph']
     )
-gr
