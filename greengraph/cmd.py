@@ -5,8 +5,8 @@ from greengraph.Graph import Graph
 
 def runModule():
     parser = ArgumentParser(description='Generates a graph that displays the number of green pixels per step between two geographical locations.')
-    parser.add_argument(dest='begin', help='Enter start location, e.g. \'London\' .')
-    parser.add_argument( dest='end', help='Enter location of target destination, e.g. \'Cambridge\'.')
+    parser.add_argument(dest='begin', help='Enter start location, e.g. \'London\'.')
+    parser.add_argument(dest='end', help='Enter location of target destination, e.g. \'Cambridge\'.')
     parser.add_argument('-s', default=25, dest='steps', help='Steps between begin and end, e.g. \'10\'.', required=False)
 
     args = parser.parse_args()
