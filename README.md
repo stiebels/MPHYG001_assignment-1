@@ -27,5 +27,5 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-  -s STEPS    Steps between begin and end, e.g. '10'.
+  -s STEPS    Steps between begin and end, e.g. '10' (default = 25).
 ```
