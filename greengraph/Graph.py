@@ -5,7 +5,7 @@ from greengraph.Map import Map
 
 '''
 This class takes latitude and longitude as input parameters,
-then obtains a map using the GoogleMaps API as PNG
+then obtains a map as PNG using the GoogleMaps API
 and eventually computes the number of green pixels on the PNG image.
 '''
 

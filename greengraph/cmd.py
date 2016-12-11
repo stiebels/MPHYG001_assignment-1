@@ -2,6 +2,9 @@ from argparse import ArgumentParser
 from matplotlib import pyplot as plt
 from greengraph.Graph import Graph
 
+'''
+This class implements the command line interface.
+'''
 
 def runModule():
     parser = ArgumentParser(description='Generates a graph that displays the number of green pixels per step between two geographical locations.')

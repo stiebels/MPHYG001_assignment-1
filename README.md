@@ -12,9 +12,9 @@ The Greengraph package includes two main classes that incorporate the functional
 2. <b><code>Graph</code></b> - This class takes two locations as input parameters, obtains its latitude and longitude parameters using the GoogleMaps API, then calls the class Map to return the number of green pixels between the two locations.
 
 
-<b>Description of the command line interface:<b>
+<b>Description of the command line interface:</b>
 
-<code>
+```
 usage: greengraph [-h] [-s STEPS] begin end
 
 Generates a graph that displays the number of green
@@ -28,4 +28,4 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
   -s STEPS    Steps between begin and end, e.g. '10'.
-  </code>
+```
