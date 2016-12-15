@@ -1,6 +1,6 @@
 # Greengraph Package
 
-Greengraph is a software package written in Python that was created and packaged as part of theassessment for the course MPHYG001 at University College London:
+Greengraph is a software package written in Python that was created and packaged as part of the assessment for the course MPHYG001 at University College London:
 http://github-pages.ucl.ac.uk/rsd-engineeringcourse/
 
 
@@ -15,17 +15,19 @@ The Greengraph package includes two main classes that incorporate the functional
 <b>Description of the command line interface:</b>
 
 ```
-usage: greengraph [-h] [-s STEPS] begin end
+usage: greengraph [-h] [-s STEPS] [-p PATH] begin end
 
-Generates a graph that displays the number of green
-pixels per step between two geographical locations.
+Generates a graph that displays the number of green pixels per step between
+two geographical locations.
 
 positional arguments:
-  begin       Enter start location, e.g. 'London' .
-  end         Enter location of target destination,
-              e.g. 'Cambridge'.
+  begin       Enter start location, e.g. 'London'.
+  end         Enter location of target destination, e.g. 'Cambridge'.
 
 optional arguments:
   -h, --help  show this help message and exit
   -s STEPS    Steps between begin and end, e.g. '10' (default = 25).
+  -p PATH     If specified, graph is saved to location specified by the path,
+              e.g. '/home/user/graph.png'. Otherwise, graph is only displayed
+              but not auto-saved.
 ```
