@@ -11,16 +11,21 @@ def runModule():
     parser.add_argument(dest='begin', help='Enter start location, e.g. \'London\'.')
     parser.add_argument(dest='end', help='Enter location of target destination, e.g. \'Cambridge\'.')
     parser.add_argument('-s', default=25, dest='steps', help='Steps between begin and end, e.g. \'10\'.', required=False)
+    parser.add_argument('-o', dest='path', help='If specified, graph is saved to location specified by the path, e.g. \'/home/user/graph.png\'. Otherwise, graph is only displayed but not auto-saved', required=False)
+
 
     args = parser.parse_args()
     plotGraph(args.begin, args.end, args.steps)
 
 
-def plotGraph(begin, end, steps):
+def plotGraph(begin, end, steps, path):
     mygraph = Graph(begin, end)
     data = mygraph.green_between(steps)
     plt.plot(data)
-    plt.show()
+    if path:
+        plt.savefig(path)
+    else:
+        plt.show()
 
 
 if __name__ == '__main__':
