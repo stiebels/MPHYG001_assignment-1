@@ -37,7 +37,7 @@ def load_map_fixtures():
 
 
 @patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
-def t_Map_init(m_req_get):
+def test_Map_init(m_req_get):
     # Tests the parameter initialization and creation of a Map object
 
     for i in range(0, 2):
@@ -79,7 +79,7 @@ def t_Map_init(m_req_get):
 
 
 @patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
-def t_green(m_req_get):
+def test_green(m_req_get):
     # Tests the correctness of the computation done by this function.
 
     t_Map = Map(51.5073509, -0.1277583)
@@ -99,7 +99,7 @@ def t_green(m_req_get):
 
 
 @patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
-def t_count_green(m_req_get):
+def test_count_green(m_req_get):
     # Tests whether the computation done by this functions is correct
     # and matches the manual computation (sum(sum(x))) of the green() function.
 
@@ -111,7 +111,7 @@ def t_count_green(m_req_get):
 
 
 @patch('requests.get', return_value=MagicMock(content=load_img_fixtures()))
-def t_show_green(m_req_get):
+def test_show_green(m_req_get):
     # Tests the decoding of the PNG file and the correctness
     # of the return value.
 

@@ -9,7 +9,7 @@ from greengraph.cmd import plotGraph
 This class tests the plotting functions in cmd.
 '''
 
-def t_plotGraph_plt():
+def test_plotGraph_plt():
     # Test calling of plotting functions in final graph
     with patch.object(Graph, 'green_between') as m_green_between:
         with patch.object(plt, 'plot') as m_plt_plot:
@@ -34,9 +34,9 @@ def t_plotGraph_plt():
                             assert (m_plt_save.call_count == 1)
 
 
-def t_plotGraph_plt_input():
+def test_plotGraph_plt_input():
     # Test whether program reports ValueError when provided with no
     # input from function green_between
     with patch.object(Graph, 'green_between', return_value=None):
         with raises(ValueError):
-            plotGraph('London', 'Cambridge', 5)
+            plotGraph('London', 'Cambridge', 5, path='dummy')

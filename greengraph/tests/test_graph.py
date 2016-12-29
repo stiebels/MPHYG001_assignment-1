@@ -3,7 +3,6 @@ from mock import patch
 import geopy
 from greengraph.Graph import Graph
 from greengraph.Map import Map
-from greengraph.tests.test_map import load_map_fixtures
 import pickle
 import os
 import numpy as np
@@ -12,6 +11,17 @@ import numpy as np
 '''
 This class tests the class Graph and its functions.
 '''
+
+def load_map_fixtures():
+    # Loads a predefined Map object of London as fixture for offline testing.
+    # Map(51.5073509, -0.1277583)
+
+    directory = str(os.path.dirname(os.path.abspath(__file__)) + '/fixtures/')
+    file = open(directory+"mock_map",'rb')
+    m_Map_fix = pickle.load(file)
+    file.close()
+    return m_Map_fix
+
 
 def load_graph_fixtures():
     # Load fixture of Graph
@@ -23,7 +33,7 @@ def load_graph_fixtures():
 
 
 @patch('geopy.geocoders.GoogleV3')
-def t_Graph_init(m_geocode):
+def test_Graph_init(m_geocode):
     # Test initialization values of Graph
     t_Graph = Graph('London', 'Cambridge')
     assert (t_Graph.start == 'London')
@@ -31,7 +41,7 @@ def t_Graph_init(m_geocode):
     m_geocode.assert_called_with(domain="maps.google.co.uk")
 
 
-def t_location_sequence():
+def test_location_sequence():
     # Test calculation of location_sequence
     t_Graph = Graph('London', 'Cambridge')
 
@@ -46,7 +56,7 @@ def t_location_sequence():
     ) == True)
 
 
-def t_geocoder():
+def test_geocoder():
     # Test unknown location passed to geolocate
     # REQUIRES INTERNET because it depends on GoogleAPI response
     t_Graph = Graph('London', 'Cambridge')
@@ -57,7 +67,7 @@ def t_geocoder():
         print('Please connect to the Internet for this test.')
 
 
-def t_geolocate():
+def test_geolocate():
     # Test calling of geopy
     t_Graph = Graph('London', 'Cambridge')
     with patch.object(geopy.geocoders.GoogleV3, 'geocode') as m_geocode:
@@ -66,7 +76,7 @@ def t_geolocate():
 
 
 @patch('geopy.geocoders.GoogleV3')
-def t_green_between(m_geocoder):
+def test_green_between(m_geocoder):
     # Test calculation of green_between
     with patch.object(Map, '__init__', return_value=load_map_fixtures()) as m_Map:
         t_Graph = Graph('London', 'Cambridge')
