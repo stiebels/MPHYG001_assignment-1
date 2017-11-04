@@ -1,9 +1,5 @@
 # Greengraph Package
 
-Greengraph is a software package written in Python that was created and packaged as part of the assessment for the course MPHYG001 at University College London:
-http://github-pages.ucl.ac.uk/rsd-engineeringcourse/
-
-
 The package enables the user to generate a graph of the proportion of green pixels in a series of satellite images between two geographical points.
 
 The Greengraph package includes two main classes that incorporate the functionality:
